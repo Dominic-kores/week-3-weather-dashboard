@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =========================================
+         BASIC PAGE SETTINGS
+    ========================================== -->
+
+    <meta charset="UTF-8">
+
+    <!-- Makes the website responsive on
+         mobile phones and tablets -->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- Page description -->
+    <meta
+        name="description"
+        content="WeatherNow is a responsive weather dashboard that displays current weather and a five-day forecast using OpenWeatherMap."
+    >
+
+    <title>WeatherNow | Weather Dashboard</title>
+
+
+    <!-- =========================================
+         CSS FILE
+    ========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="app-header">
+
+        <div class="container header-content">
+
+            <!-- Application name -->
+            <div class="app-brand">
+
+                <h1>
+                    WeatherNow
+                </h1>
+
+                <p class="app-tagline">
+                    Your simple weather dashboard
+                </p>
+
+            </div>
+
+
+            <!-- =================================
+                 TEMPERATURE UNIT TOGGLE
+            ================================== -->
+
+            <div
+                class="unit-toggle"
+                aria-label="Temperature unit"
+            >
+
+                <!--
+                    The active class will be
+                    controlled by JavaScript.
+                -->
+
+                <button
+                    id="celsius-btn"
+                    class="unit-btn active"
+                    type="button"
+                    aria-label="Show temperature in Celsius"
+                >
+                    °C
+                </button>
+
+
+                <button
+                    id="fahrenheit-btn"
+                    class="unit-btn"
+                    type="button"
+                    aria-label="Show temperature in Fahrenheit"
+                >
+                    °F
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN APPLICATION
+    ========================================== -->
+
+    <main class="container">
+
+
+        <!-- =====================================
+             SEARCH SECTION
+        ====================================== -->
+
+        <section
+            class="search-section"
+            aria-labelledby="search-title"
+        >
+
+            <h2 id="search-title">
+                Check the Weather
+            </h2>
+
+
+            <p class="search-description">
+                Search for a city to view its current weather
+                and five-day forecast.
+            </p>
+
+
+            <!--
+                Using a form means:
+                - Clicking Search works
+                - Pressing Enter also works
+
+                JavaScript listens for the
+                submit event.
+            -->
+
+            <form id="search-form">
+
+                <div class="search-bar">
+
+                    <label
+                        for="city-input"
+                        class="visually-hidden"
+                    >
+                        Enter city name
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="city-input"
+                        name="city"
+                        placeholder="Enter a city, e.g. Canberra"
+                        autocomplete="off"
+                        required
+                        aria-label="City name"
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="search-btn"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+            </form>
+
+
+
+            <!-- =================================
+                 SEARCH HISTORY
+            ================================== -->
+
+            <div class="history-section">
+
+                <div class="history-header">
+
+                    <h3>
+                        Recent Searches
+                    </h3>
+
+
+                    <!--
+                        JavaScript listens for
+                        clicks on this button.
+                    -->
+
+                    <button
+                        id="clear-history-btn"
+                        type="button"
+                    >
+                        Clear History
+                    </button>
+
+                </div>
+
+
+                <!--
+                    JavaScript dynamically creates
+                    search history buttons here.
+
+                    Example:
+
+                    <button class="history-btn">
+                        Canberra
+                    </button>
+                -->
+
+                <div
+                    id="search-history"
+                    aria-label="Recent city searches"
+                >
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             STATUS AREA
+        ====================================== -->
+
+
+        <!-- =================================
+             LOADING STATE
+        ================================== -->
+
+        <!--
+            JavaScript removes the "hidden"
+            class while API data is loading.
+        -->
+
+        <div
+            id="loading"
+            class="status-message hidden"
+            role="status"
+            aria-live="polite"
+        >
+
+            <div class="loading-content">
+
+                <span class="spinner"></span>
+
+                <span>
+                    Loading weather data...
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================
+             ERROR STATE
+        ================================== -->
+
+        <!--
+            JavaScript inserts errors here.
+
+            Examples:
+
+            City not found.
+
+            Invalid API key.
+
+            Network unavailable.
+        -->
+
+        <div
+            id="error-message"
+            class="error-message hidden"
+            role="alert"
+            aria-live="assertive"
+        >
+        </div>
+
+
+
+        <!-- =====================================
+             CURRENT WEATHER
+        ====================================== -->
+
+        <!--
+            This section starts hidden.
+
+            After the API successfully returns
+            weather information, JavaScript removes
+            the hidden class.
+        -->
+
+        <section
+            id="current-weather"
+            class="weather-card hidden"
+            aria-labelledby="city-name"
+        >
+
+
+            <!-- =================================
+                 WEATHER HEADER
+            ================================== -->
+
+            <div class="weather-heading">
+
+                <div>
+
+                    <!--
+                        JavaScript changes this to:
+
+                        Canberra, AU
+
+                        Nairobi, KE
+
+                        Dubai, AE
+                    -->
+
+                    <h2 id="city-name">
+                        City Name
+                    </h2>
+
+
+                    <!--
+                        JavaScript inserts the
+                        searched city's local date
+                        and time here.
+                    -->
+
+                    <p id="current-date">
+                        Current date and time
+                    </p>
+
+                </div>
+
+
+                <!--
+                    OpenWeatherMap weather icon
+                    will be inserted here.
+                -->
+
+                <img
+                    id="weather-icon"
+                    src=""
+                    alt="Weather condition"
+                >
+
+            </div>
+
+
+
+            <!-- =================================
+                 MAIN TEMPERATURE
+            ================================== -->
+
+            <div class="temperature-section">
+
+                <!--
+                    Example:
+
+                    18°C
+
+                    or
+
+                    64°F
+                -->
+
+                <p
+                    id="current-temperature"
+                    class="main-temperature"
+                >
+                    --°
+                </p>
+
+
+                <!--
+                    Example:
+
+                    Clear Sky
+                    Light Rain
+                    Broken Clouds
+                -->
+
+                <p
+                    id="weather-description"
+                    class="weather-description"
+                >
+                    Weather condition
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================
+                 WEATHER DETAILS
+            ================================== -->
+
+            <div class="weather-details">
+
+
+                <!-- FEELS LIKE -->
+
+                <div class="detail-card">
+
+                    <h3>
+                        Feels Like
+                    </h3>
+
+                    <p id="feels-like">
+                        --
+                    </p>
+
+                </div>
+
+
+
+                <!-- HUMIDITY -->
+
+                <div class="detail-card">
+
+                    <h3>
+                        Humidity
+                    </h3>
+
+                    <p id="humidity">
+                        --
+                    </p>
+
+                </div>
+
+
+
+                <!-- WIND -->
+
+                <div class="detail-card">
+
+                    <h3>
+                        Wind Speed
+                    </h3>
+
+                    <p id="wind-speed">
+                        --
+                    </p>
+
+                </div>
+
+
+
+                <!-- PRESSURE -->
+
+                <div class="detail-card">
+
+                    <h3>
+                        Pressure
+                    </h3>
+
+                    <p id="pressure">
+                        --
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             FIVE-DAY FORECAST
+        ====================================== -->
+
+        <!--
+            JavaScript generates the forecast
+            cards dynamically.
+        -->
+
+        <section
+            id="forecast-section"
+            class="forecast-section hidden"
+            aria-labelledby="forecast-title"
+        >
+
+            <div class="section-heading">
+
+                <h2 id="forecast-title">
+                    5-Day Forecast
+                </h2>
+
+            </div>
+
+
+            <!--
+                JavaScript will create cards similar to:
+
+                <div class="forecast-card">
+
+                    <h3>Friday</h3>
+
+                    <img
+                        src="weather-icon-url"
+                        alt="Clear sky"
+                    >
+
+                    <div class="forecast-temperatures">
+
+                        <span class="forecast-high">
+                            24°C
+                        </span>
+
+                        <span class="forecast-low">
+                            14°C
+                        </span>
+
+                    </div>
+
+                    <p class="forecast-condition">
+                        Clear Sky
+                    </p>
+
+                </div>
+            -->
+
+            <div
+                id="forecast-container"
+                class="forecast-container"
+            >
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="app-footer">
+
+        <div class="container">
+
+            <p>
+                WeatherNow
+                &copy;
+                <span id="footer-year">
+                    2026
+                </span>
+            </p>
+
+
+            <p class="weather-credit">
+                Weather data powered by OpenWeatherMap
+            </p>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <!--
+        The JavaScript file is placed at the
+        bottom of the body.
+
+        This allows the HTML elements to load
+        before JavaScript tries to select them.
+    -->
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>

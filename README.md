@@ -209,6 +209,8 @@ Example:
 ```markdown
 ![Weather-dashboard](images/mobile-version.PNG)
 
+```
+
 
 
 

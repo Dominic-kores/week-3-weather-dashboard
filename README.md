@@ -240,6 +240,9 @@ localStorage
 application state
 ```
 
+## Live pages
+https://dominic-kores.github.io/week-3-weather-dashboard/
+
 ---
 
 ## Summary
